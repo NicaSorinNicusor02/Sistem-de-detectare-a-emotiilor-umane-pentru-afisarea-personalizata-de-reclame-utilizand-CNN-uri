@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block title %}Ticket Deschis cu Succes{% endblock %}
+
+{% block content %}
+  <h2>Ticket deschis cu succes!</h2>
+  <p>Mulțumim pentru că ne-ai raportat problema. Echipa noastră se va ocupa de ea cât mai curând posibil.</p>
+  <a href="{% url 'open_ticket' %}">Întoarce-te la deschiderea unui alt tichet</a>
+  <p><a href="{% url 'my_tickets' %}">Înapoi la tichetele mele</a></p>
+{% endblock %}

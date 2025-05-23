@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Tichetele mele{% endblock %}
+
+{% block header %}Tichetele mele{% endblock %}
+
+{% block content %}
+  {% if tickets %}
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="bg-primary text-white">
+          <tr>
+            <th>Nr. Tichet</th>
+            <th>Descriere</th>
+            <th>Status</th>
+            <th>Data creării</th>
+            <th>Răspuns</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for ticket in tickets %}
+            <tr>
+              <td>#{{ ticket.id }}</td>
+              <td>{{ ticket.description }}</td>
+              <td>
+                {% if ticket.status == 'open' %}
+                  <span class="badge badge-warning">Deschis</span>
+                {% elif ticket.status == 'in_progress' %}
+                  <span class="badge badge-info">În lucru</span>
+                {% elif ticket.status == 'resolved' %}
+                  <span class="badge badge-success">Rezolvat</span>
+                {% elif ticket.status == 'closed' %}
+                  <span class="badge badge-secondary">Închis</span>
+                {% else %}
+                  <span class="badge badge-primary">{{ ticket.status }}</span>
+                {% endif %}
+              </td>
+              <td>{{ ticket.created_at|date:"d.m.Y H:i" }}</td>
+              <td>
+                {% if ticket.admin_response %}
+                  <div class="card">
+                    <div class="card-body p-2">
+                      {{ ticket.admin_response }}
+                      {% if ticket.response_date %}
+                        <div class="text-muted mt-2 small">
+                          Răspuns la: {{ ticket.response_date|date:"d.m.Y H:i" }}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% else %}
+                  <em class="text-muted">Așteptăm răspunsul administratorului...</em>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <p class="mb-0">Nu aveți niciun tichet deschis.</p>
+    </div>
+  {% endif %}
+  
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <a href="{% url 'open_ticket' %}" class="btn btn-success btn-block mb-2">
+        Deschide un tichet nou
+      </a>
+    </div>
+    <div class="col-md-6">
+      <a href="{% url 'home' %}" class="btn btn-outline-primary btn-block mb-2">
+        Înapoi la pagina principală
+      </a>
+    </div>
+  </div>
+{% endblock %}

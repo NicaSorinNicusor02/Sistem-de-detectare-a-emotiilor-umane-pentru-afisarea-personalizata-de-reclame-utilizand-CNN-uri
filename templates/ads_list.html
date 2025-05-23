@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Reclamele mele{% endblock %}
+
+{% block header %}Reclamele mele{% endblock %}
+
+{% block content %}
+  {% if ads %}
+    <div class="row">
+      {% for ad in ads %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            <!-- categoria reclamei este in partea de sus -->
+            <div class="card-header text-center bg-info text-white">
+              {{ ad.get_category_display }}
+            </div>
+
+            <!-- iamginea sau videoul in mijloc -->
+            {% if ad.image %}
+            <img src="{{ ad.image.url }}" class="card-img-top" alt="{{ ad.title }}" style="height: 200px; object-fit: cover;">
+            {% elif ad.video %}
+            <div style="height: 200px; position: relative;">
+              <video class="card-img-top" style="height: 200px; object-fit: cover;" controls>
+                <source src="{{ ad.video.url }}" type="video/mp4">
+                Browserul dvs. nu suportă tag-ul video.
+              </video>
+              <div style="position: absolute; top: 10px; right: 10px; background-color: rgba(0,0,0,0.6); color: white; padding: 2px 8px; border-radius: 4px;">
+                <small>Video</small>
+              </div>
+            </div>
+            {% else %}
+            <div style="height: 200px; display: flex; align-items: center; justify-content: center; background-color: #f8f9fa;">
+              <p class="text-muted">Fără imagine sau video</p>
+            </div>
+            {% endif %}
+            
+            <!-- titlul sub imagine -->
+            <div class="card-body">
+              <h5 class="card-title text-center">{{ ad.title }}</h5>
+            </div>
+            
+            <!-- butonul de stergere la baza chenalului -->
+            <div class="card-footer bg-white">
+              <form action="{% url 'delete_ad' ad.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm btn-block" 
+                        onclick="return confirm('Ești sigur că vrei să ștergi această reclamă?');">
+                  Șterge reclama
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">
+      <p class="mb-0">Nu ai nicio reclamă încă.</p>
+    </div>
+    <div class="text-center mt-3">
+      <a href="{% url 'upload_ad' %}" class="btn btn-success">
+        Adaugă o reclamă
+      </a>
+    </div>
+  {% endif %}
+  
+  <div class="mt-4 text-center">
+    <a href="{% url 'home' %}" class="btn btn-outline-primary">
+      Înapoi la pagina principală
+    </a>
+  </div>
+{% endblock %}
