@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Conectare{% endblock %}
+
+{% block header %}Conectează-te la contul tău{% endblock %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  
+  {% load bootstrap4 %}
+  {% bootstrap_form form %}
+  
+  <div class="form-group mt-4">
+    <button type="submit" class="btn btn-primary btn-block">Conectează-te</button>
+  </div>
+  
+  <div class="text-center mt-3">
+    <a href="{% url 'password_reset' %}" class="text-muted">Ai uitat parola?</a>
+    <span class="mx-2">|</span>
+    <a href="{% url 'register' %}" class="text-muted">Nu ai un cont? Înregistrează-te</a>
+  </div>
+</form>
+{% endblock %}

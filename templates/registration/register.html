@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Înregistrare Cont{% endblock %}
+
+{% block header %}Creează un cont nou{% endblock %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    
+    {% load bootstrap4 %}
+    {% bootstrap_form form %}
+    
+    <button type="submit" class="btn btn-primary">Înregistrează-te</button>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const citySelect = document.getElementById('id_city');
+    const shoppingCenterSelect = document.getElementById('id_shopping_center');
+
+    const shoppingCenters = JSON.parse('{{ shopping_centers_json|escapejs }}');
+
+    citySelect.addEventListener('change', function() {
+        const selectedCity = this.value;
+        
+        // reseteaza selectorul de centre comerciale
+        shoppingCenterSelect.innerHTML = '<option value="">Selectează centru comercial</option>';
+        
+        if (selectedCity) {
+            //populeaza centrele comerciale pentru orasul selectat
+            const centers = shoppingCenters[selectedCity] || [];
+            centers.forEach(center => {
+                const option = document.createElement('option');
+                option.value = center[0];
+                option.textContent = center[1];
+                shoppingCenterSelect.appendChild(option);
+            });
+        }
+    });
+});
+</script>
+{% endblock %}
