@@ -1,0 +1,14 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block sidebar %}
+{{ block.super }}
+<div class="module">
+    <h2>{% trans 'Detectare emoții și afișare reclame' %}</h2>
+    <ul>
+        <li>
+            <a href="{% url 'emotion_detection' %}">Pornește detecția emoțiilor și afișarea reclamelor</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}

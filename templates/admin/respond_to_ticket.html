@@ -1,0 +1,74 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">Acasă</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:website_ads_ticket_changelist' %}">Tichete</a>
+    &rsaquo; Răspunde la tichet
+</div>
+{% endblock %}
+
+{% block content %}
+<div>
+    <div style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
+        <h3>Detalii tichet:</h3>
+        <p><strong>Utilizator:</strong> {{ ticket.user.username }}</p>
+        <p><strong>Nume:</strong> {{ ticket.user.first_name }} {{ ticket.user.last_name }}</p>
+        <p><strong>Email:</strong> {{ ticket.user.email }}</p>
+        <p><strong>Telefon:</strong> {{ ticket.user.phone_number }}</p>
+        <p><strong>Oraș:</strong> {{ ticket.user.get_city_display }}</p>
+        <p><strong>Centru comercial:</strong> {{ ticket.user.get_shopping_center_display }}</p>
+        <p><strong>Nume magazin:</strong> {{ ticket.user.store_name }}</p>
+        <p><strong>Data creării:</strong> {{ ticket.created_at|date:"d.m.Y H:i" }}</p>
+        <p><strong>Status:</strong> 
+            {% if ticket.status == 'open' %}
+                Deschis
+            {% elif ticket.status == 'in_progress' %}
+                În lucru
+            {% elif ticket.status == 'resolved' %}
+                Rezolvat
+            {% elif ticket.status == 'closed' %}
+                Închis
+            {% else %}
+                {{ ticket.status }}
+            {% endif %}
+        </p>
+        <p><strong>Descriere problemă:</strong></p>
+        <div style="padding: 10px; background-color: #fff; border: 1px solid #eee; border-radius: 4px;">
+            {{ ticket.description|linebreaks }}
+        </div>
+        
+        {% if ticket.admin_response %}
+        <p><strong>Răspunsul tău anterior:</strong></p>
+        <div style="padding: 10px; background-color: #fff; border: 1px solid #eee; border-radius: 4px;">
+            {{ ticket.admin_response|linebreaks }}
+            <small>Răspuns la: {{ ticket.response_date|date:"d.m.Y H:i" }}</small>
+        </div>
+        {% endif %}
+    </div>
+    
+    <form action="" method="post">
+        {% csrf_token %}
+        <fieldset class="module aligned">
+            {% for field in form %}
+                <div class="form-row">
+                    <div>
+                        {{ field.errors }}
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}
+                            <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </fieldset>
+        <div class="submit-row">
+            <input type="submit" value="Trimite răspunsul" class="default" />
+            <a href="{% url 'admin:website_ads_ticket_changelist' %}" class="button">Anulează</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

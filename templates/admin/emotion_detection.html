@@ -1,0 +1,26 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; Detectare emoții și afișare reclame
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>Detecția emoțiilor pe baza camerei și afișarea reclamelor </h1>
+
+{% if launched %}
+<p class="success">Camera video pentru detectarea emoțiilor a fost pornită!</p>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+    <input type="submit" value="Pornește detecția emoțiilor și afișarea reclamelor" />
+</form>
+{% endif %}
+
+
+<p>Apasă pe butonul de mai sus pentru a lansa camera video pentru detectarea emoțiilor și afișarea reclamelor.
+    Apasă tasta 'q' în fereastra camerei video pentru a o închide.</p>
+{% endblock %}
