@@ -13,22 +13,15 @@ class AdForm(forms.ModelForm):
     def clean_image(self):
         file = self.cleaned_data.get('image')
         if file:
-            # obtine extensia fisierului
             name = file.name.lower()
             image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
             video_extensions = ['.mp4', '.mov', '.avi', '.wmv', '.flv', '.webm', '.mkv']
             
-            # verific daca este video
             if any(name.endswith(ext) for ext in video_extensions):
-                #fisierul este video si il vom salva in campul video in view
                 self.instance.video = file
-                return None  # aici nu salvam nimic în câmpul image
-            
-            #verifica daca este imagine
+                return None
             elif any(name.endswith(ext) for ext in image_extensions):
-                return file  #este imagine continuam normal
-            
-            # daca nu este nici imagine nici video acceptat afisez mesajul
+                return file
             else:
                 raise forms.ValidationError(
                     "Formatele de fișier acceptate sunt: " + 
@@ -36,7 +29,6 @@ class AdForm(forms.ModelForm):
                     ", ".join(video_extensions) + " pentru videoclipuri."
                 )
         return file   
-
 
 class TicketForm(forms.ModelForm):
     class Meta:
