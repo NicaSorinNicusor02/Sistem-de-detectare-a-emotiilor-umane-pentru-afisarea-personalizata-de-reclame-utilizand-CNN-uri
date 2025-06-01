@@ -17,15 +17,14 @@ class Ad(models.Model):
         ('categorie10', 'Supermarket'),
         ('categorie11', 'Agenții de turism')
     ]
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # asociez reclama cu utilizatorul
-    title = models.CharField(max_length=255, default="")  #adauga titlul reclamei
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, default="")
     category = models.CharField(max_length=100)
-    image = models.ImageField(upload_to='ads/', null=True, blank=True)  # imaginea reclamei
-    video = models.FileField(upload_to='ads_videos/', null=True, blank=True)  # adaugam campul video
+    image = models.ImageField(upload_to='ads/', null=True, blank=True)
+    video = models.FileField(upload_to='ads_videos/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_category_display(self):
-        """Returnează numele categoriei, nu codul (categorie1 -> Mancare)"""
         return dict(self.CATEGORIES_CHOICES).get(self.category, "Necunoscut")
 
 User = get_user_model()
@@ -39,10 +38,10 @@ class Ticket(models.Model):
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Nume utilizator")
-    description = models.TextField(verbose_name="Descriere")  #descrierea tichetului
+    description = models.TextField(verbose_name="Descriere")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="open")
     created_at = models.DateTimeField(auto_now_add=True)
-    admin_response = models.TextField(blank=True, null=True, verbose_name="Răspuns administrator")  # raspunsul administratorului
+    admin_response = models.TextField(blank=True, null=True, verbose_name="Răspuns administrator")
     response_date = models.DateTimeField(blank=True, null=True, verbose_name="Data răspunsului")
 
     def __str__(self):
