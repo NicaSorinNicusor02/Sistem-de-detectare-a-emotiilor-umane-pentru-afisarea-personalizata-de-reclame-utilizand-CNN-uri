@@ -40,24 +40,20 @@ class TicketAdmin(admin.ModelAdmin):
     
     def respond_to_ticket(self, request, ticket_id):
         ticket = get_object_or_404(Ticket, id=ticket_id)
-        
         if request.method == 'POST':
             form = ResponseForm(request.POST)
             if form.is_valid():
-                # salvam rsspunsul in ticket-ul existent
                 ticket.admin_response = form.cleaned_data['response']
                 ticket.response_date = timezone.now()
                 ticket.status = 'resolved'
                 ticket.save()
-                
-                # pentru debugging am scris aceste printuri
+
                 print(f"Răspuns salvat pentru tichetul #{ticket.id}")
                 print(f"Conținutul răspunsului: {ticket.admin_response}")
                 
                 self.message_user(request, f"Răspunsul a fost trimis pentru tichetul #{ticket.id}")
                 return redirect('admin:website_ads_ticket_changelist')
         else:
-            # pre-completeaza formularul cu raspunsul existent daca exista
             initial_data = {}
             if ticket.admin_response:
                 initial_data['response'] = ticket.admin_response
@@ -83,11 +79,7 @@ class TicketAdmin(admin.ModelAdmin):
         queryset.update(status='closed')
     mark_as_closed.short_description = "Marchează ca Închis"
 
-# inregistram Ticket cu clasa TicketAdmin
 admin.site.register(Ticket, TicketAdmin)
-
-
-
 
 class MyAdminSite(admin.AdminSite):
     def get_urls(self):
