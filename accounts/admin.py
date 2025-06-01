@@ -11,7 +11,6 @@ class CustomUserChangeForm(UserChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.city:
-            # seteaza valorile pentru shopping_center bazat pe orasul utilizatorului
             city = self.instance.city
             shopping_centers = SHOPPING_CENTERS.get(city, [])
             self.fields['shopping_center'] = forms.ChoiceField(
