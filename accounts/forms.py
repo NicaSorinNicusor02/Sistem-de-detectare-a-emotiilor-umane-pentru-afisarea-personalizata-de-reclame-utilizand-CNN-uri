@@ -133,14 +133,9 @@ class CustomUserCreationForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
-                
-            # reseteaza optiunile pentru shopping_center
             self.fields['shopping_center'].choices = [('', 'Selectează centru comercial')]
-                
-            #daca formularul este trimis cu date
             if self.data.get('city'):
                 city = self.data.get('city')
-                    #actualizeaza optiunile pentru shopping_center bazat pe orasul selectat
                 self.fields['shopping_center'].choices = (
                     [('', 'Selectează centru comercial')] + 
                     SHOPPING_CENTERS.get(city, [])
@@ -150,8 +145,6 @@ class CustomUserCreationForm(UserCreationForm):
         cleaned_data = super().clean()
         city = cleaned_data.get('city')
         shopping_center = cleaned_data.get('shopping_center')
-
-            #validare sa se asigure ca centrul comercial apartine orasului
         if city and shopping_center:
             valid_centers = [mall[0] for mall in SHOPPING_CENTERS.get(city, [])]
             if shopping_center not in valid_centers:
