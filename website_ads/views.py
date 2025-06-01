@@ -11,32 +11,26 @@ import sys
 from django.shortcuts import get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 
-
 @login_required
 def ads_list(request):
-    ads = Ad.objects.filter(user=request.user)  # aici se preiau reclamele
+    ads = Ad.objects.filter(user=request.user)
     return render(request, 'ads_list.html', {'ads': ads})
 
 @login_required
 def upload_ad(request):
     if request.method == "POST":
-        form = AdForm(request.POST, request.FILES)  #procesare formular
+        form = AdForm(request.POST, request.FILES)
         if form.is_valid():
             ad = form.save(commit=False)
-            ad.user = request.user  #asociaza reclama cu utilizatorul curent
-
-            # verifica daca este un fisier video in instanta, setat în clean_image
+            ad.user = request.user
             if hasattr(form.instance, 'video') and form.instance.video:
                 ad.video = form.instance.video
-                ad.image = None  #resetam imaginea daca avem video
-
+                ad.image = None
             ad.save()
-            return redirect("ads_list")  #redirectioneaza catre lista de reclame
+            return redirect("ads_list") 
     else:
-        form = AdForm()  #formularul gol pentru GET request
-
+        form = AdForm()
     return render(request, "upload_ad.html", {"form": form})
-
 
 @login_required
 def open_ticket(request):
@@ -44,7 +38,7 @@ def open_ticket(request):
         form = TicketForm(request.POST)
         if form.is_valid():
             ticket = form.save(commit=False)
-            ticket.user = request.user  #asociaza tichetul cu utilizatorul logat
+            ticket.user = request.user
             ticket.save()
             return redirect("success_page")
     else:
@@ -56,28 +50,22 @@ def success_page(request):
 
 @login_required
 def delete_ad(request, ad_id):
-    ad = get_object_or_404(Ad, id=ad_id, user=request.user)  #se asigura ca doar utilizatorul isi poate sterge reclama
+    ad = get_object_or_404(Ad, id=ad_id, user=request.user)
     if ad.image:  
-        ad.image.delete(save=False)  #sterge imaginea fizic din server
-
-    ad.delete()  # sterge reclama din baza de date
-    return redirect('ads_list')  # redirectioneaza utilizatorul inapoi la lista reclamelor
-
+        ad.image.delete(save=False)
+    ad.delete()
+    return redirect('ads_list')
 
 @login_required
 def my_tickets(request):
     tickets = Ticket.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'my_tickets.html', {'tickets': tickets})
 
-
 @staff_member_required
 def launch_emotion_detection(request):
     if request.method == 'POST':
-        # preia calea catre scriptul cu modelul care clasifica emotiile
         script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'test_webcam.py')
-        # porneste scriptul intr un proces separat
         subprocess.Popen([sys.executable, script_path])
-        
         context = {'launched': True}
         return render(request, 'admin/emotion_detection.html', context)
     
