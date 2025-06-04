@@ -23,12 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     citySelect.addEventListener('change', function() {
         const selectedCity = this.value;
-        
-        // reseteaza selectorul de centre comerciale
         shoppingCenterSelect.innerHTML = '<option value="">Selectează centru comercial</option>';
         
         if (selectedCity) {
-            //populeaza centrele comerciale pentru orasul selectat
             const centers = shoppingCenters[selectedCity] || [];
             centers.forEach(center => {
                 const option = document.createElement('option');
