@@ -4,7 +4,6 @@ import cv2
 import numpy as np
 import tensorflow as tf
 load_model = tf.keras.models.load_model
-
 from collections import Counter
 import show_ads_frame
 from show_ads_frame import process_neural_output, EMOTION_TO_CATEGORY, emotion_vector
