@@ -8,6 +8,8 @@ from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 
 IMG_WIDTH = 48
 IMG_HEIGHT = 48
@@ -207,7 +209,7 @@ def train_and_evaluate():
     print(f'Loss pe setul de test: {test_loss:.4f}')
     
     
-    plot_training_history(history)
+    plot_training_history(history, model, X_test, y_test)
     
 
     model.save('final_emotion_model_48x48_final.keras')
@@ -240,7 +242,16 @@ def plot_training_history(history):
     plt.savefig('training_history_48x48.png')
     plt.show()
 
-
+    EMOTIONS = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+    y_pred = np.argmax(model.predict(X_test), axis=1)
+    y_true = np.argmax(y_test, axis=1)
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(8, 6))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=EMOTIONS, yticklabels=EMOTIONS)
+    plt.xlabel('Predicții')
+    plt.ylabel('Etichete reale')
+    plt.title('Matricea de confuzie')
+    plt.show()
 
 def predict_and_visualize(model, X_test, y_test, num_images=5):
     
