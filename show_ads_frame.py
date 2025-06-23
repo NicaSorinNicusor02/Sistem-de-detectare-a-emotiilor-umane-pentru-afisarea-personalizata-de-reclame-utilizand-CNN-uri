@@ -226,7 +226,7 @@ def show_ads_window():
         if hasattr(selected_ad, 'video') and selected_ad.video and selected_ad.video.name and imageio_available:
             video_path = selected_ad.video.path
             info_text = f"Categorie: {selected_ad.category}"
-            ad_label.config(text=info_text, compound="bottom")
+            ad_label.config(text=info_text, compound="top")
             if play_video(video_path):
                 return
         if hasattr(selected_ad, 'image') and selected_ad.image and selected_ad.image.name:
@@ -238,7 +238,7 @@ def show_ads_window():
                 ad_label.config(image=img_tk)
                 ad_label.image = img_tk
                 info_text = f"Categorie: {selected_ad.category}"
-                ad_label.config(text=info_text, compound="bottom")
+                ad_label.config(text=info_text, compound="top")
             except Exception as e:
                 print(f"Eroare la incarcarea imaginii: {e}")
                 ad_label.config(image=None, text=f"Categorie: {selected_ad.category}")
