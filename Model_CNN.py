@@ -27,7 +27,7 @@ def load_data(train_path, test_path):
     y_test = []
     
 
-    print("Încărcare date de antrenare...")
+    
     for emotion_idx, emotion in enumerate(EMOTIONS):
         emotion_dir = os.path.join(train_path, emotion)
         
@@ -51,7 +51,7 @@ def load_data(train_path, test_path):
                 X_train.append(img_array)
                 y_train.append(emotion_idx)
     
-    print("Încărcare date de testare...")
+    
     for emotion_idx, emotion in enumerate(EMOTIONS):
         emotion_dir = os.path.join(test_path, emotion)
         
@@ -78,8 +78,8 @@ def load_data(train_path, test_path):
     X_test = np.array(X_test, dtype='float32')
     y_test = np.array(y_test)
     
-    print(f"Număr de imagini de antrenare: {len(X_train)}")
-    print(f"Număr de imagini de testare: {len(X_test)}")
+    print(f"nr imagini de antrenare: {len(X_train)}")
+    print(f"nr imagini de testare: {len(X_test)}")
     
     y_train = tf.keras.utils.to_categorical(y_train, NUM_CLASSES)
     y_test = tf.keras.utils.to_categorical(y_test, NUM_CLASSES)
@@ -205,7 +205,7 @@ def train_and_evaluate():
     
     
     test_loss, test_acc = model.evaluate(X_test, y_test)
-    print(f'\nAcuratețe pe setul de test: {test_acc:.4f}')
+    print(f'\nAcuratete pe setul de test: {test_acc:.4f}')
     print(f'Loss pe setul de test: {test_loss:.4f}')
     
     
